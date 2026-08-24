@@ -1,0 +1,1 @@
+"""Camera detection worker package."""

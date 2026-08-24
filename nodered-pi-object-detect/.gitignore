@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+models/*.onnx
+public/latest.jpg
+public/events/*
+runtime/

@@ -1,0 +1,118 @@
+[
+  {
+    "id": "tab-pi-object-detector",
+    "type": "tab",
+    "label": "Pi物体検知",
+    "disabled": false,
+    "info": "カメラ映像を物体検知し、LAN向けWeb画面で表示"
+  },
+  {
+    "id": "camera-node",
+    "type": "pi-camera-stream",
+    "z": "tab-pi-object-detector",
+    "name": "USBカメラ映像",
+    "projectRoot": "",
+    "configPath": "config/detector.json",
+    "pythonPath": "",
+    "autoStart": true,
+    "autoRestart": true,
+    "outputs": 2,
+    "x": 210,
+    "y": 180,
+    "wires": [["detector-node"], ["store-camera-status"]]
+  },
+  {
+    "id": "detector-node",
+    "type": "pi-object-detector",
+    "z": "tab-pi-object-detector",
+    "name": "物体検知",
+    "projectRoot": "",
+    "configPath": "config/detector.json",
+    "pythonPath": "",
+    "autoStart": true,
+    "autoRestart": true,
+    "outputs": 3,
+    "x": 480,
+    "y": 180,
+    "wires": [["store-status"], ["store-event"], ["store-error"]]
+  },
+  {
+    "id": "store-camera-status",
+    "type": "function",
+    "z": "tab-pi-object-detector",
+    "name": "カメラ状態を保存",
+    "func": "const status = msg.payload || {};\nflow.set('cameraStatus', status);\nif (status.state === 'running') flow.set('cameraError', null);\nif (status.state === 'error') flow.set('cameraError', status);\nreturn msg;",
+    "outputs": 1,
+    "x": 500,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "store-status",
+    "type": "function",
+    "z": "tab-pi-object-detector",
+    "name": "検知状態を保存",
+    "func": "flow.set('detectorStatus', msg.payload || {});\nif ((msg.payload || {}).state === 'running') flow.set('detectorError', null);\nreturn msg;",
+    "outputs": 1,
+    "x": 730,
+    "y": 140,
+    "wires": []
+  },
+  {
+    "id": "store-event",
+    "type": "function",
+    "z": "tab-pi-object-detector",
+    "name": "イベントを保存",
+    "func": "flow.set('lastEvent', msg.payload || {});\nreturn msg;",
+    "outputs": 1,
+    "x": 730,
+    "y": 190,
+    "wires": []
+  },
+  {
+    "id": "store-error",
+    "type": "function",
+    "z": "tab-pi-object-detector",
+    "name": "検知エラーを保存",
+    "func": "flow.set('detectorError', msg.payload || {});\nreturn msg;",
+    "outputs": 1,
+    "x": 730,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "health-http-in",
+    "type": "http in",
+    "z": "tab-pi-object-detector",
+    "name": "稼働状態",
+    "url": "/health",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 170,
+    "y": 420,
+    "wires": [["health-response"]]
+  },
+  {
+    "id": "health-response",
+    "type": "function",
+    "z": "tab-pi-object-detector",
+    "name": "稼働状態JSON",
+    "func": "const camera = flow.get('cameraStatus') || { state: 'starting' };\nconst detector = flow.get('detectorStatus') || { state: 'starting' };\nconst error = { camera: flow.get('cameraError') || null, detector: flow.get('detectorError') || null };\nconst ok = camera.state === 'running' && detector.state === 'running' && !error.camera && !error.detector;\nmsg.statusCode = ok ? 200 : 503;\nmsg.headers = { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' };\nmsg.payload = { ok, camera, detector, status: detector, error };\nreturn msg;",
+    "outputs": 1,
+    "x": 410,
+    "y": 420,
+    "wires": [["health-http-out"]]
+  },
+  {
+    "id": "health-http-out",
+    "type": "http response",
+    "z": "tab-pi-object-detector",
+    "name": "稼働状態レスポンス",
+    "statusCode": "",
+    "headers": {},
+    "x": 650,
+    "y": 420,
+    "wires": []
+  }
+]

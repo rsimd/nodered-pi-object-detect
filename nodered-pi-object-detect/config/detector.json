@@ -1,0 +1,28 @@
+{
+  "camera": {
+    "type": "usb",
+    "device": "/dev/video0",
+    "fallback_devices": ["/dev/video1"],
+    "width": 640,
+    "height": 480,
+    "fps": 15,
+    "stream_fps": 15,
+    "jpeg_quality": 80
+  },
+  "model": {
+    "path": "models/yolo26n.onnx",
+    "input_size": 640,
+    "confidence": 0.4,
+    "nms_iou": 0.45,
+    "classes": null
+  },
+  "runtime": {
+    "public_dir": "public",
+    "max_inference_fps": 5,
+    "min_track_hits": 3,
+    "track_iou": 0.3,
+    "max_missing_seconds": 1.5,
+    "retention_count": 500,
+    "retention_days": 7
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "node-red-contrib-pi-camera-stream",
+  "version": "0.1.0",
+  "description": "Raspberry PiのUSBカメラ映像をJPEGフレームとしてNode-REDへ渡すノードです。",
+  "license": "MIT",
+  "keywords": ["node-red", "camera", "mjpeg", "raspberry-pi", "v4l2"],
+  "node-red": {
+    "nodes": {
+      "pi-camera-stream": "pi-camera-stream.js"
+    }
+  }
+}

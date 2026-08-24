@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Raspberry Pi 物体検知</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div>
+        <h1>Raspberry Pi 物体検知</h1>
+        <p class="subtitle">新しく登場した物体だけを記録します</p>
+      </div>
+      <div id="health" class="health health-unknown">状態確認中</div>
+    </header>
+
+    <section class="preview-card" aria-labelledby="preview-title">
+      <div class="section-heading">
+        <h2 id="preview-title">ライブプレビュー</h2>
+        <span id="metrics" class="metrics">--</span>
+      </div>
+      <div class="preview-frame">
+        <img id="preview" alt="カメラの最新フレーム">
+      </div>
+    </section>
+
+    <section class="events-card" aria-labelledby="events-title">
+      <div class="section-heading">
+        <h2 id="events-title">新規物体</h2>
+        <span id="event-count" class="metrics">0件</span>
+      </div>
+      <div id="events" class="events-grid" aria-live="polite"></div>
+      <p id="empty" class="empty">まだイベントはありません。</p>
+    </section>
+  </main>
+
+  <dialog id="viewer" class="viewer">
+    <button id="close-viewer" class="close-button" type="button" aria-label="閉じる">×</button>
+    <img id="large-image" alt="イベント画像">
+    <div id="large-caption" class="large-caption"></div>
+  </dialog>
+  <script src="/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "node-red-contrib-pi-object-detector",
+  "version": "0.1.0",
+  "description": "Raspberry Piの物体検知ワーカーを起動・監視するNode-REDノードです。",
+  "license": "MIT",
+  "keywords": ["node-red", "camera", "object-detection", "raspberry-pi"],
+  "node-red": {
+    "nodes": {
+      "pi-object-detector": "pi-object-detector.js"
+    }
+  }
+}
