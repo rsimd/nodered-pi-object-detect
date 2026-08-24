@@ -1,32 +1,12 @@
-# ハンズオン実装契約: Raspberry Pi Node-RED物体検知
+# ハンズオン実装の手順書: Raspberry Pi Node-RED物体検知
 
 このAGENTS.mdだけを入力として、空の作業環境から同じ機能を再実装する。ほかの文書や既存資産を前提にしてはいけない。
 
-## 1. 受講者が最初に設定する値
+## 1. 実装前提
 
-ユーザー名、IPアドレス、ホスト名は受講者ごとに異なるため、ソースコードや手順へ固定値を埋め込まない。最初に次の値を設定し、以後はプレースホルダーを使う。
+受講者は、開発対象のRaspberry Piと開発環境を準備済みであることを前提とする。ここでは接続方法や開発環境の準備方法は扱わず、アプリケーションの実装手順だけを定める。
 
-```bash
-export PI_USER="<Raspberry PiのLinuxユーザー名>"
-export PI_HOST="<Raspberry PiのIPアドレスまたはホスト名>"
-export PI_APP_DIR="/home/${PI_USER}/nodered-pi-object-detect"
-export PI_NODE_RED_DIR="/home/${PI_USER}/.node-red"
-export APP_URL="http://${PI_HOST}:1880/"
-```
-
-## 1.1 VS Code Remote Developmentで接続する
-
-コマンドラインのSSHは使わず、VS CodeのRemote Development機能で作業する。
-
-1. VS Codeに `Remote Development` 拡張パック、または `Remote - SSH` 拡張をインストールする。
-2. コマンドパレットから `Remote-SSH: Connect to Host...` を選ぶ。
-3. 接続先として `${PI_USER}@${PI_HOST}` を入力する。
-4. 接続後のリモートウィンドウで、リモート側の `${PI_APP_DIR}` を開く。ディレクトリがなければ、VS Codeの統合ターミナルで作成してから開く。
-5. ファイル編集、Node-RED導入、依存関係導入、テスト、サービス操作は、すべてリモートウィンドウのエクスプローラーと統合ターミナルで行う。
-
-ローカルウィンドウのターミナルでPi向けコマンドを実行しない。sudoのパスワード入力が必要な場合は、リモートウィンドウの統合ターミナルで受講者が入力する。
-
-ローカルでは、既存の作業ディレクトリとは別に新しいアプリケーションディレクトリを作成する。アプリ名は `nodered-pi-object-detect` とする。
+作業先として新しいアプリケーションディレクトリを作成し、アプリ名は `nodered-pi-object-detect` とする。
 
 対象ハードウェアは Raspberry Pi 4 または Raspberry Pi 5 とする。64-bitのDebian系OSを使用し、カメラとNode-REDは同じPi上で動かす。
 
@@ -36,9 +16,9 @@ Raspberry PiへNode-REDを導入し、USBカメラ映像を取得して軽量な
 
 再実装後に提供するURLは次の形にする。
 
-- `http://${PI_HOST}:1880/`:物体検知Web画面
-- `http://${PI_HOST}:1880/red/`:Node-REDエディタ
-- `http://${PI_HOST}:1880/api/health`:稼働状態API
+- `http://<PI_HOST>:1880/`:物体検知Web画面
+- `http://<PI_HOST>:1880/red/`:Node-REDエディタ
+- `http://<PI_HOST>:1880/api/health`:稼働状態API
 
 ## 3. 実装方針
 
@@ -226,9 +206,7 @@ Debian系Raspberry Pi向けのNode-RED公式インストール手順を使う。
 
 カメラ利用ユーザーをvideoグループへ追加し、ログインセッションを更新する。Node-REDは `nodered.service` で自動起動・自動再起動する。
 
-Node-REDユーザーディレクトリは固定パスを使わず、サービスを実行するユーザーのホームディレクトリから求める。カスタムノードのインストール、設定、フロー配置、サービス再起動は、VS Codeのリモートウィンドウにある統合ターミナルから行う。
-
-パスワード、秘密鍵、Node-RED認証情報をAGENTS.mdやソースへ書き込まない。sudoが必要な操作は、VS Codeのリモートウィンドウの統合ターミナルで実行する。
+Node-REDユーザーディレクトリは固定の利用者名を埋め込まず、サービスを実行するユーザーのホームディレクトリから求める。カスタムノードのインストール、設定、フロー配置、サービス再起動を行う。パスワードやNode-RED認証情報をAGENTS.mdやソースへ書き込まない。
 
 ## 12. ハンズオン検証
 
@@ -238,7 +216,7 @@ Node-REDユーザーディレクトリは固定パスを使わず、サービス
 2. Pythonコンパイル、Node.js構文、Node-REDフローJSONを検査する。
 3. `node-red --version` が表示されることを確認する。
 4. `systemctl is-enabled nodered.service` が `enabled` であることを確認する。
-5. `curl "http://${PI_HOST}:1880/api/health"` が正常時HTTP 200を返すことを確認する。
+5. `curl "http://<PI_HOST>:1880/api/health"` が正常時HTTP 200を返すことを確認する。
 6. `/latest.jpg` がJPEGとして取得できることを確認する。
 7. 同一LANのPCでWeb画面とNode-REDエディタを開く。
 8. Node-REDパレットに `USBカメラ映像` と `物体検知カメラ` が日本語表示されることを確認する。
@@ -254,6 +232,5 @@ Pi 4とPi 5ではCPU性能、冷却、OS、カメラドライバによってFPS�
 - カメラ映像がNode-REDフローを通って物体検知へ届く。
 - 新規物体だけが保存され、一覧と大画像がWeb画面に表示される。
 - Node-REDの画面上のノード名が日本語である。
-- username、IPアドレス、ホームディレクトリがプレースホルダーまたは環境変数であり、特定利用者に固定されていない。
 - 既存コードに依存せず、AGENTS.mdだけを読んだ実装者がゼロから再現できる。
 - LAN内公開を基本とし、外部公開時は認証、TLS、ファイアウォールを追加する。
