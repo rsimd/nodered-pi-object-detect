@@ -1,7 +1,8 @@
 # Node-RED Raspberry Pi object detector
 
-詳細な要件、構成、通信仕様、API、インストール、検証結果は
-[`SPECIFICATION.md`](SPECIFICATION.md) にまとめています。
+再現に必要な要件、構成、通信仕様、API、インストール、検証結果は、リポジトリ
+ルートの [`AGENTS.md`](../AGENTS.md) にまとめています。次回の実装では、この
+AGENTS.mdを最初に読み、`nodered-pi-object-detect/` の中だけで作業してください。
 
 This project is intentionally independent of the existing projects in the parent directory.
 It installs Node-RED on the Raspberry Pi and connects a custom USB camera stream node to a
