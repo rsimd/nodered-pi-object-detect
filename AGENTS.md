@@ -14,11 +14,17 @@ export PI_NODE_RED_DIR="/home/${PI_USER}/.node-red"
 export APP_URL="http://${PI_HOST}:1880/"
 ```
 
-SSH接続は次の形にする。
+## 1.1 VS Code Remote Developmentで接続する
 
-```bash
-ssh "${PI_USER}@${PI_HOST}"
-```
+コマンドラインのSSHは使わず、VS CodeのRemote Development機能で作業する。
+
+1. VS Codeに `Remote Development` 拡張パック、または `Remote - SSH` 拡張をインストールする。
+2. コマンドパレットから `Remote-SSH: Connect to Host...` を選ぶ。
+3. 接続先として `${PI_USER}@${PI_HOST}` を入力する。
+4. 接続後のリモートウィンドウで、リモート側の `${PI_APP_DIR}` を開く。ディレクトリがなければ、VS Codeの統合ターミナルで作成してから開く。
+5. ファイル編集、Node-RED導入、依存関係導入、テスト、サービス操作は、すべてリモートウィンドウのエクスプローラーと統合ターミナルで行う。
+
+ローカルウィンドウのターミナルでPi向けコマンドを実行しない。sudoのパスワード入力が必要な場合は、リモートウィンドウの統合ターミナルで受講者が入力する。
 
 ローカルでは、既存の作業ディレクトリとは別に新しいアプリケーションディレクトリを作成する。アプリ名は `nodered-pi-object-detect` とする。
 
@@ -218,16 +224,9 @@ Debian系Raspberry Pi向けのNode-RED公式インストール手順を使う。
 
 カメラ利用ユーザーをvideoグループへ追加し、ログインセッションを更新する。Node-REDは `nodered.service` で自動起動・自動再起動する。
 
-Node-REDユーザーディレクトリは固定パスを使わず、サービスを実行するユーザーのホームディレクトリから求める。カスタムノードのインストール、設定、フロー配置、サービス再起動は次の変数を使って行う。
+Node-REDユーザーディレクトリは固定パスを使わず、サービスを実行するユーザーのホームディレクトリから求める。カスタムノードのインストール、設定、フロー配置、サービス再起動は、VS Codeのリモートウィンドウにある統合ターミナルから行う。
 
-```bash
-export PI_USER="<Linuxユーザー名>"
-export PI_HOST="<IPアドレスまたはホスト名>"
-export PI_APP_DIR="/home/${PI_USER}/nodered-pi-object-detect"
-export PI_NODE_RED_DIR="/home/${PI_USER}/.node-red"
-```
-
-パスワード、SSH秘密鍵、Node-RED認証情報をAGENTS.mdやソースへ書き込まない。sudoが必要な操作は受講者がPiの端末で実行できるよう、対象コマンドを明示する。
+パスワード、秘密鍵、Node-RED認証情報をAGENTS.mdやソースへ書き込まない。sudoが必要な操作は、VS Codeのリモートウィンドウの統合ターミナルで実行する。
 
 ## 12. ハンズオン検証
 
