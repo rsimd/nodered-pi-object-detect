@@ -1,5 +1,8 @@
 # Node-RED Raspberry Pi object detector
 
+<img width="1121" height="565" alt="スクリーンショット 2026-08-25 17 13 27" src="https://github.com/user-attachments/assets/ca556c49-6dc7-4d1c-8e1f-584c659d397b" />
+
+
 再現に必要な要件、構成、通信仕様、API、インストール、検証結果は、リポジトリ
 ルートの [`AGENTS.md`](AGENTS.md) にまとめています。次回の実装では、この
 AGENTS.mdを最初に読み、リポジトリルートで作業してください。
